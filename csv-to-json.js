@@ -23,7 +23,7 @@ rl.on('line', (line) => {
  			
 
   }
-  rl.on('end',function() {
+  rl.on('end',function() {demo
 	write_to_json.write(JSON.stringify(year_object,null,2),'UTF-8');
 });
 

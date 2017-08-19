@@ -18,39 +18,35 @@ const rl = readline.createInterface({
 rl.on('line', (line) => {
   line
   .split('\n')
-  let arr = line.split(',')
-  if(arr[1] === 'IND' && arr[3] === 'SP.URB.TOTL.IN.ZS'){
-			year_object[arr[4]] = year_object[arr[4]] || [];	
-					year_object[arr[4]].push({
-						"Urban Population (% in total)" : arr[5]
+  let line_holder = line.split(',')
+  if(line_holder[1] === 'IND' && line_holder[3] === 'SP.URB.TOTL.IN.ZS'){
+			year_object[line_holder[4]] = year_object[line_holder[4]] || [];	
+					year_object[line_holder[4]].push({
+						"Urban Population (% in total)" : line_holder[5]
 					});
   }
- 	if(arr[1] === 'IND' && arr[3] === 'SP.RUR.TOTL.ZS'){
-			year_object[arr[4]] = year_object[arr[4]] || [];		
-					year_object[arr[4]].push({
-						"Rural Population (% in total)" : arr[5]
+ 	if(line_holder[1] === 'IND' && line_holder[3] === 'SP.RUR.TOTL.ZS'){
+			year_object[line_holder[4]] = year_object[line_holder[4]] || [];		
+					year_object[line_holder[4]].push({
+						"Rural Population (% in total)" : line_holder[5]
 					});
 
   }
-  if(arr[1] === 'IND' && arr[3] === 'SP.URB.GROW'){
-			urb_pop_grow[arr[4]] = urb_pop_grow[arr[4]] || [];	
-					urb_pop_grow[arr[4]].push({
-						"Urban population growth(annual %)" : arr[5]
+  if(line_holder[1] === 'IND' && line_holder[3] === 'SP.URB.GROW'){
+			urb_pop_grow[line_holder[4]] = urb_pop_grow[line_holder[4]] || [];	
+					urb_pop_grow[line_holder[4]].push({
+						"Urban population growth(annual %)" : line_holder[5]
 					});
 	}
-	if(asia.find(x => x == arr[1]) != undefined){
-		if(arr[arr.length-3] == 'SP.URB.TOTL'){
-			urb_pop = parseFloat(arr[arr.length-1]);
-		}
-		if(arr[arr.length-3] == 'SP.RUR.TOTL'){
-			rur_pop = parseFloat(arr[arr.length-1]);
-		}
-		urb_pop += rur_pop;
-		urb_rur_population[arr[0]] = urb_rur_population[arr[0]] || [];	
-					urb_rur_population[arr[0]].push({
-						"Year" : arr[arr.length-2],
-						"Urban Population + Rural Population" : urb_pop
+	if((asia.find(x => x === line_holder[1]) != undefined)){
+		if(line_holder[line_holder.length-3] === 'SP.POP.TOTL'){
+			urb_rur_population[line_holder[line_holder.length-2]] = urb_rur_population[line_holder[line_holder.length-2]] || [];
+			urb_rur_population[line_holder[line_holder.length-2]].push({
+						"country name" : line_holder[0],
+						"Country" : line_holder[1],
+						"Urban Population + Rural Population" : line_holder[line_holder.length-1]
 					});
+		}
 	}
 }).on('close', () => {
   write_to_json_urban.write(JSON.stringify(year_object,null,2),'UTF-8');

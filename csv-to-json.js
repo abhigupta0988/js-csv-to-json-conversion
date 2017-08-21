@@ -7,11 +7,6 @@ let asia = ['ARM','AZE','BHR','BGD','BTN','BRN','KHM','CHN','CXR','CCK','IOT','G
 							'IRN','IRQ','ISR','JPN','JOR','KAZ','KWT','KGZ','LAO','LBN','MAC','MYS','MDV','MNG','MMR',
 								'NPL','PRK','OMN','PAK','PSE','PHL','QAT','SAU','SGP','KOR','LKA','SYR','TWN','TJK','THA',
 									'TUR','TKM','ARE','UZB','VNM','YEM'];
-
-let write_to_json_asia = fs.createWriteStream('asia-total-pop.json');	//json for countries of asia
-let write_to_json_urban = fs.createWriteStream('urb-rur-total-pop.json');	//json for Urban Population (% in total)
-let write_to_json_urb_pop = fs.createWriteStream('urb-pop-growth.json');	//json for Urban population growth(annual %)
-
 const rl = readline.createInterface({
 	input: fs.createReadStream('indicators.csv') //reading file indicators.csv
 });
@@ -23,19 +18,19 @@ rl.on('line', (line) => {
 	if(line_holder[1] === 'IND' && line_holder[3] === 'SP.URB.TOTL.IN.ZS'){	//comparing for urban population
 		year_object[line_holder[4]] = year_object[line_holder[4]] || [];	//setting year as object
 		year_object[line_holder[4]].push({
-			"Urban Population (% in total)" : parseFloat(line_holder[5])
+			"Urban Population (% in total)" : line_holder[5]
 		});
 	}
 	if(line_holder[1] === 'IND' && line_holder[3] === 'SP.RUR.TOTL.ZS'){	//comparing for rural population
 		year_object[line_holder[4]] = year_object[line_holder[4]] || [];	//setting year as object
 		year_object[line_holder[4]].push({
-			"Rural Population (% in total)" : parseFloat(line_holder[5])
+			"Rural Population (% in total)" : line_holder[5]
 		});
 	}
 	if(line_holder[1] === 'IND' && line_holder[3] === 'SP.URB.GROW'){	//comparing for urban population growth
 		urb_pop_grow[line_holder[4]] = urb_pop_grow[line_holder[4]] || [];	//setting year as object
 		urb_pop_grow[line_holder[4]].push({
-			"Urban population growth(annual %)" : parseFloat(line_holder[5])
+			"Urban population growth(annual %)" : line_holder[5]
 		});
 	}
 	if((asia.find(x => x === line_holder[1]) != undefined)){	//comparing for countries in asia and total population
@@ -44,14 +39,17 @@ rl.on('line', (line) => {
 				= urb_rur_population[line_holder[line_holder.length-2]] || [];	//setting year as object
 			urb_rur_population[line_holder[line_holder.length-2]].push({
 				"country name" : line_holder[0],
-				"Urban Population + Rural Population" : parseInt(line_holder[line_holder.length-1])
+				"Urban Population + Rural Population" : line_holder[line_holder.length-1]
 			});
 		}
 	}
 })
 .on('close', () => {
-	write_to_json_urban.write(JSON.stringify(year_object,null,2)); //writing year_object to urb-rur-total-pop.json
-	write_to_json_urb_pop.write(JSON.stringify(urb_pop_grow,null,2));	//writing urb_pop_grow to urb-pop-growth.json
-	write_to_json_asia.write(JSON.stringify(urb_rur_population,null,2));	//writing urb_rur_populationto asia-total-pop.json
+	fs.createWriteStream('asia-total-pop.json')						
+		.write(JSON.stringify(urb_rur_population,null,2));	//writing urb_rur_populationto asia-total-pop.json*/
+	fs.createWriteStream('urb-rur-total-pop.json')
+		.write(JSON.stringify(year_object,null,2));;	//writing year_object to urb-rur-total-pop.json
+	fs.createWriteStream('urb-pop-growth.json')
+		.write(JSON.stringify(urb_pop_grow,null,2));	//writing urb_pop_grow to urb-pop-growth.json
 	console.log('Created file\n1. urb-rur-total-pop.json\n2. urb-pop-growth.json\n3. asia-total-pop.json');
 });

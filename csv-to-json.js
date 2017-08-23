@@ -48,7 +48,7 @@ rl.on('line', (line) => {
 	}
 })
 .on('close', () => {
-    urb_rur_population.sort((a,b)=>{return b.Total_Population - a.Total_Population});
+  urb_rur_population.sort((a,b) =>  b.Total_Population - a.Total_Population);
 	fs.createWriteStream('urb-rur-total-pop.json').write(JSON.stringify(year_object,null,2)); //writing year_object to urb-rur-total-pop.json
 	fs.createWriteStream('urb-pop-growth.json').write(JSON.stringify(urb_pop_grow,null,2));	//writing urb_pop_grow to urb-pop-growth.json
 	fs.createWriteStream('asia-total-pop.json').write(JSON.stringify(urb_rur_population,null,2));	//writing urb_rur_population to asia-total-pop.json

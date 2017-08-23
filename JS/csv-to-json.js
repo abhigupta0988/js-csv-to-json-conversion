@@ -8,9 +8,7 @@ const rl = readline.createInterface({
 	input: fs.createReadStream('indicators.csv') //reading file indicators.csv
 });
 
-rl.on('line', (line) => {        line
-13
-        .split('\n')
+rl.on('line', (line) => {
 	let line_holder = line.match(/"[^"]+"|[^,]+/g); //regex for ignoring commas inside double codes
 	if(count == 1){		
 		index['Year'] = line_holder.indexOf('Year');
@@ -30,7 +28,7 @@ rl.on('line', (line) => {        line
 				let index_of_year = year_object.findIndex(x => x.year === line_holder[index['Year']]);
 				year_object[index_of_year][line_holder[index['IndicatorCode']] == "SP.URB.TOTL.IN.ZS"?'urban':'rural'] = parseFloat(line_holder[index['Value']]);
 			}
-		}
+	}
 	if(line_holder[index['CountryCode']] === 'IND' && line_holder[index['IndicatorCode']] === 'SP.URB.GROW'){	//comparing for urban population growth
 		urb_pop_grow.push({
 			"Year" : parseInt(line_holder[index['Year']]),

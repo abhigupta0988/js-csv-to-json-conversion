@@ -28,20 +28,22 @@ rl.on('line', (line) => {
 				let index_of_year = year_object.findIndex(x => x.year === line_holder[index['Year']]);
 				year_object[index_of_year][line_holder[index['IndicatorCode']] == "SP.URB.TOTL.IN.ZS"?'urban':'rural'] = parseFloat(line_holder[index['Value']]);
 			}
-	}
+		}
 	if(line_holder[index['CountryCode']] === 'IND' && line_holder[index['IndicatorCode']] === 'SP.URB.GROW'){	//comparing for urban population growth
 		urb_pop_grow.push({
 			"Year" : parseInt(line_holder[index['Year']]),
 			"urban_growth" : parseFloat(line_holder[index['Value']])
 		});
 	}
-	if((asia.find(x => x === line_holder[index['CountryCode']]) != undefined)){	//comparing for countries in asia and total population
-		if(line_holder[index['IndicatorCode']] === 'SP.POP.TOTL'){
-			urb_rur_population.push({
-				"Year" : parseInt(line_holder[index['Year']]),
-				"Country_Code" : line_holder[index['CountryCode']],
-				"Total_Population" : parseFloat(line_holder[index['Value']]),
-			});
+	if(((asia.find(x => x === line_holder[index['CountryCode']]) != undefined)) && line_holder[index['IndicatorCode']] == "SP.POP.TOTL") {
+		if(urb_rur_population.find(x => x.year == line_holder[index['Year']]) == undefined) {
+			temp = { year : line_holder[index['Year']] }
+			temp[line_holder[index['CountryName']].replace(/\"/g,"")] = parseFloat(line_holder[index['Value']]);
+			urb_rur_population.push(temp);
+		}
+		else {
+			let index_of_year = urb_rur_population.findIndex(x => x.year === line_holder[index['Year']]);
+			urb_rur_population[index_of_year][line_holder[index['CountryName']].replace(/\"/g,"")] = parseFloat(line_holder[index['Value']]);
 		}
 	}
 })

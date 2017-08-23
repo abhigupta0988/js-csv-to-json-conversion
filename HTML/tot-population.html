@@ -53,51 +53,6 @@ var svg = d3.select("body").append("svg")
 function draw(data) {
   
   var data = data;
-  
-  // format the data
-  data.forEach(function(d) {
-      d.Year = d.year;
-      d.urban = d.urban;
-      d.rural = d.rural;
-  });
-  
-  // sort years ascending
-  data.sort(function(a, b){
-    return a["Year"]-b["Year"];
-  })
- 
-  // Scale the range of the data
-  x.domain(d3.extent(data, function(d) { return d.Year; }));
-  y.domain([0, d3.max(data, function(d) {
-    return Math.max(d.urban, d.rural); })]);
-  
-  // Add the valueline path.
-  svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", valueline);
-  // Add the valueline path.
-  svg.append("path")
-      .data([data])
-      .attr("class", "line-rural")
-      .attr("d", valueline2);  
-  // Add the X Axis
-  svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-     .call(d3.axisBottom(x)
-     .ticks(10)
-       .tickFormat(d3.format("d",0)));
-
-  // Add the Y Axis
-  svg.append("g")
-      .call(d3.axisLeft(y));
-  }
-// Get the data
-d3.json("/JSON/urb-rur-total-pop.json", function(error, data) {
-  if (error) throw error;
-  
-  // trigger render
-  draw(data);
 });
 
 </script>

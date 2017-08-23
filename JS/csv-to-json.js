@@ -8,9 +8,9 @@ const rl = readline.createInterface({
 	input: fs.createReadStream('indicators.csv') //reading file indicators.csv
 });
 
-rl.on('line', (line) => {
-	line
-	.split('\n')
+rl.on('line', (line) => {        line
+13
+        .split('\n')
 	let line_holder = line.match(/"[^"]+"|[^,]+/g); //regex for ignoring commas inside double codes
 	if(count == 1){		
 		index['Year'] = line_holder.indexOf('Year');
